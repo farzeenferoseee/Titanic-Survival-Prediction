@@ -35,9 +35,6 @@ input_data = pd.DataFrame({
        'Embarked': [embarked]
    })
 
-#Mean imputation for numerical variable and mode imputation for categorical variable
-train['Age'] = train['Age'].fillna(mean_age)
-
 # Preprocess input data
 input_data = pd.get_dummies(input_data, columns=['Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'])
 # Handle missing columns to match training data
