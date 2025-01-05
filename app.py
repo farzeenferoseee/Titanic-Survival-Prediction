@@ -1,5 +1,3 @@
-#Code for app.py
-   
 import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
