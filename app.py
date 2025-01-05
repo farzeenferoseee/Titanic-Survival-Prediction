@@ -25,27 +25,42 @@ fare = st.number_input("Fare", min_value=0.0, value=30.0)
 embarked = st.selectbox("Embarked", ["C", "Q", "S"])
 
 # Create input DataFrame
-input_data = pd.DataFrame({
-       'Pclass': [pclass],
-       'Sex': [sex],
-       'Age': [age],
-       'SibSp': [sibsp],
-       'Parch': [parch],
-       'Fare': [fare],
-       'Embarked': [embarked]
-   })
 
-# Preprocess input data
-input_data = pd.get_dummies(input_data, 
-                             columns=['Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'],
-                             prefix=['Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'],
-                             prefix_sep='_')
+user_input = {
+    'Age': [age],
+    'Fare': [fare],
+    'Pclass_1': int(pclass == 1),
+    'Pclass_2': int(pclass == 2),
+    'Pclass_3': int(pclass == 3),
+    'Sex_female': int(sex == 'female'),
+    'Sex_male': int(sex == 'male'),
+    'SibSp_0': int(sibsp == 0),
+    'SibSp_1': int(sibsp == 1),
+    'SibSp_2': int(sibsp == 2),
+    'SibSp_3': int(sibsp == 3),
+    'SibSp_4': int(sibsp == 4),
+    'SibSp_5': int(sibsp == 5),
+    'SibSp_8': int(sibsp == 8),
+    'Parch_0': int(parch == 0),
+    'Parch_1': int(parch == 1),
+    'Parch_2': int(parch == 2),
+    'Parch_3': int(parch == 3),
+    'Parch_4': int(parch == 4),
+    'Parch_5': int(parch == 5),
+    'Parch_6': int(parch == 6),
+    'Embarked_C': int(embarked == 'C'),
+    'Embarked_Q': int(embarked == 'Q'),
+    'Embarked_S': int(embarked == 'S')
+}
 
-# Handle missing columns to match training data
-missing_cols = set(model.coef_[0]) - set(input_data.columns) # Get columns from model instead
-for c in missing_cols:
-  input_data[c] = 0
-input_data = input_data[feature_names]
+# Create the DataFrame with specified column order
+column_order = ['Age', 'Fare', 'Pclass_1', 'Pclass_2', 'Pclass_3', 'Sex_female',
+       'Sex_male', 'SibSp_0', 'SibSp_1', 'SibSp_2', 'SibSp_3', 'SibSp_4',
+       'SibSp_5', 'SibSp_8', 'Parch_0', 'Parch_1', 'Parch_2', 'Parch_3',
+       'Parch_4', 'Parch_5', 'Parch_6', 'Embarked_C', 'Embarked_Q',
+       'Embarked_S']  # Your specified order
+
+input_data = pd.DataFrame([user_input], columns=column_order)
 
 input_data_scaled = scaler.transform(input_data)
 
