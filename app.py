@@ -36,7 +36,11 @@ input_data = pd.DataFrame({
    })
 
 # Preprocess input data
-input_data = pd.get_dummies(input_data, columns=['Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'])
+input_data = pd.get_dummies(input_data, 
+                             columns=['Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'],
+                             prefix=['Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'],
+                             prefix_sep='_')
+
 # Handle missing columns to match training data
 missing_cols = set(model.coef_[0]) - set(input_data.columns) # Get columns from model instead
 for c in missing_cols:
