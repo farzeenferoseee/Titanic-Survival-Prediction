@@ -21,7 +21,7 @@ sex = st.selectbox("Sex", ["male", "female"])
 age = st.number_input("Age", min_value=0, max_value=100, value=30)
 sibsp = st.number_input("Number of Siblings/Spouses", min_value=0, max_value=10, value=0)
 parch = st.number_input("Number of Parents/Children", min_value=0, max_value=10, value=0)
-fare = st.number_input("Fare", min_value=0.0, value=30.0) 
+fare = st.number_input("Fare", min_value=0.0, value=30.0)
 embarked = st.selectbox("Embarked", ["C", "Q", "S"])
 
 # Create input DataFrame
@@ -60,7 +60,16 @@ column_order = ['Age', 'Fare', 'Pclass_1', 'Pclass_2', 'Pclass_3', 'Sex_female',
        'Parch_4', 'Parch_5', 'Parch_6', 'Embarked_C', 'Embarked_Q',
        'Embarked_S']  # Your specified order
 
-input_data = pd.DataFrame([user_input], columns=column_order)
+# Create an empty DataFrame with the features expected by the model
+input_data = pd.DataFrame(columns=feature_names, index=[0]).fillna(0) 
+
+input_data['Age'] = age
+input_data['Fare'] = fare
+input_data[f'Pclass_{pclass}'] = 1  # One-hot encode Pclass
+input_data[f'Sex_{sex}'] = 1  # One-hot encode Sex
+input_data[f'SibSp_{sibsp}'] = 1  # One-hot encode SibSp
+input_data[f'Parch_{parch}'] = 1  # One-hot encode Parch
+input_data[f'Embarked_{embarked}'] = 1 # One-hot encode Embarked
 
 input_data_scaled = scaler.transform(input_data)
 
